@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta description="author" content="Jacob Lewis"/>
+        <title>My website</title>
+
+        <!-- This is the flask syntax for linking to a css file -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">        
+    </head>
+
+    <body>
+
+        <h1>IoT Programming - Group Assignment</h1>
+        <hr>
+        <h2 class="taskHeader task1">Temperature sensor</h2>
+        <h3>Fan state:</h3>
+        <p>Outside temperature: <span id="outsideTemp"></span> &#8451;</p>
+        <p>Inside temperature: <span id="insideTemp"></span> &#8451;</p>
+
+        <form>
+            <label for="tempThresholdInput">Temperature threshold:</label>
+            <input id="tempThresholdInput" type="text" maxlength="3"/>
+            <button type="button">Update</button>
+        </form>
+
+        <h2 class="taskHeader task2">Memory Game</h2>
+    </body>
+
+    <!-- By adding this first script tag within the HTML, we can pass
+    an array of data from Python Flask to ourselves using the HTML template-->
+    <script>
+        var temp = {{ data.temp|tojson }}   
+
+        // This line will change the insideTemp span innerHTML to the temperature value that
+        // we have passed through the above line of code.   
+        // The first data value in the array is the temperature, therefore it's 'temp[0]'
+        document.getElementById("insideTemp").innerHTML = temp[0]
+    </script>
+
+    <!-- This is the flask syntax for linking to a js file -->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</html>

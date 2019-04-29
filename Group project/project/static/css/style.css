@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  background: #0B0C10;
+  color: #C5C6C7;
+}
+
+a {
+  color: #45A29E;
+}
+a:hover, a:focus {
+  color: #66FCF1;
+}
+
+body {
+  line-height: 24px;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 21.6px;
+}
+
+h4 {
+  font-size: 19.2px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+h6 {
+  font-size: 14.4px;
+}
+
+blockquote {
+  border-left: 2px solid #45A29E;
+  padding-left: 24px;
+}
+
+.box, .rounded-box {
+  background: #1F2833;
+  padding: 24px;
+}
+.box > p, .rounded-box > p {
+  margin: 0;
+}
+
+.rounded-box {
+  -webkit-border-radius: 24px;
+  -moz-border-radius: 24px;
+  -ms-border-radius: 24px;
+  border-radius: 24px;
+}
+
+.inline
+{
+    display: inline;
+}
+
+.taskHeader
+{
+    color: #66FCF1;
+}
+
+#tempThresholdInput
+{
+  width: 30px;
+}
+
+.task2
+{
+  padding-top: 50px;
+}
