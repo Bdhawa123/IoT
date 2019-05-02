@@ -7,12 +7,16 @@ IRrecv irrecv(RECV_PIN);
 decode_results results;
 int currentNumber = 0;
 int buzzer = 12;
+int tripleled; // rgb light 
+int analog_bl = 0; // blue
+int analog_rd = 1;  //red
+int analog_gr = 2; // green
 
-int laststored =  0;
-int buzzedno = 0;
+int blok; //random number
+int laststored =  0; //last stored no 
 int level = 1;
 int correct = 0;
-String userid = "";       //for user to input 
+String userid = "";
 
 int delayone = 300;
 int delaytwo = 200;
@@ -49,20 +53,36 @@ void numberShow(int i) {                  //this function is used to display num
 
 void setup(){
   Serial.begin(9600);
-  pinMode(buzzer,OUTPUT);
-  irrecv.enableIRIn();
+  randomSeed(analogRead(0));  //setting random  
+  
+  pinMode(A0,OUTPUT); //blue
+  pinMode(A1,OUTPUT);//red
+  pinMode(A2,OUTPUT);//green
+  pinMode(buzzer,OUTPUT); //buzzer
+  irrecv.enableIRIn();  
 
   for(int pin = 2 ; pin <= 9 ; pin++){
       pinMode(pin, OUTPUT);
       digitalWrite(pin, HIGH);
   }
 
-  UserID();
+   digitalWrite(A0, HIGH); 
+    UserID();
+  digitalWrite(A0,LOW);
+  delay(1000);
+  
+  //starts buzzer on purple
+  digitalWrite(A0,HIGH);
+  digitalWrite(A1,HIGH);
+  
   Serial.print("User ID: ");
   Serial.println(userid);
-  
+  //rgb green about to start 
+  //delay timer for 3 sec 
+
   buzzes(delayone,delaytwo);
-  randomSeed(analogRead(0));
+  digitalWrite(A1,LOW);
+
 }
 
 /*
@@ -86,36 +106,35 @@ void UserID() {
     if (irrecv.decode(&results)) 
     {
       
-        //Serial.println("First if");
         for(int i = 0; i <= 11; i++)
            {   
-           //Serial.println("for statement");
-           //Serial.println(results.value,HEX);
+         
            if(results.value == codes[i]&& i <= 9){
                  numberShow(1);  // display number 0~9 on the digital control
                  userid += String(i);
-                 //Serial.println(i);
+                 
                  numberShow(i); 
                  break;
-                // Serial.print("Double Shit");
-                 
-           
-           } 
-                  
-             //delay(200);
-          
+              } 
            }
-           irrecv.resume();
-           
-         }
-           
+           irrecv.resume();           
+         }           
   }
 }
 
 void buzzes(int dl1, int dl2)
 {
+  //turn all the lights off
+    digitalWrite(A0,LOW);
+    digitalWrite(A1,LOW);
+    digitalWrite(A2,LOW);
+    
+
+  //turns purple to let it buzz
+    digitalWrite(A0,HIGH);
+    digitalWrite(A1,HIGH);
   //random numbers
-  int blok = random(10);
+  blok = random(10);
   
   //int blok = rand() % 10;  
   laststored = blok; //setting the value of global variable to the current no of times of blink
@@ -131,13 +150,14 @@ void buzzes(int dl1, int dl2)
     delay(dl2);
     
   }
-  
+
+    digitalWrite(A1,LOW);//blue on red off
+    //digitalWrite(A1,LOW); 
 }
 
 
+
 void loop() {
-  
- 
   if (irrecv.decode(&results )&& userid!="") 
   {
       for(int i = 0; i <= 11; i++){
@@ -149,28 +169,55 @@ void loop() {
 
                if (laststored==currentNumber)
                {
-                  Serial.println("Congrats you're roght");
-                  buzzes(delayone,delaytwo);
+                  Serial.println("Congrats you're right");
+                  digitalWrite(A0,LOW); //blue down
+                  digitalWrite(A2,HIGH);//green up correct
+                  delay(500);
                   correct++;
+                  
+                  
                   Serial.println("correct No ");
                   Serial.println(correct);
+
+                  numberShow(blok);
+
+                 
+                  //rgb green for printing correct answer
+                  
                   if (correct==3)
                   {
-                    correct= 0;
-                    level++;
-                    delayone = delayone/2;
-                    delaytwo = delaytwo/2; 
+                    correct= 0; //reset correct counter
+                    level++;    //level up 
+
+              
+                   digitalWrite(A0,LOW);
+                     
+                    digitalWrite(A0,HIGH);
+                    digitalWrite(A2,HIGH);
+                    digitalWrite(A1,LOW);
+                 
+                    delay(3000);
                     
-                  }       
+                    delayone = 300/level;
+                    delaytwo = 200/level; 
+                    ///rgb green blink 5 times rapid succession  next level
+                  }
+                  buzzes(delayone,delaytwo);       
                }  
                else
                {
                   Serial.println("Haha You're wrong");
                   level = 0;
                   correct =0;
+                  delayone = 300;
+                  delaytwo = 200;
+                
+                  ///rgb red wrong answer 
+                  digitalWrite(A0, LOW); //blue down 
+                  digitalWrite(A1,HIGH); // red up wrong
+                  delay(500);
+                  numberShow(blok);
                }
-
-          
                
                  break;
          }
